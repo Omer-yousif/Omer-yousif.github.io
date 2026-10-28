@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SolarSpec · PV design and proposal studio</title>
+<meta name="description" content="Size a rooftop solar PV system, check the string design, model bills under Malaysia's Solar ATAP or any tariff, and print a client-ready proposal. Free, runs in your browser.">
+<meta name="theme-color" content="#07080E">
+<meta property="og:title" content="SolarSpec · PV design and proposal studio">
+<meta property="og:description" content="Solar sizing, string design, Solar ATAP savings, payback and a printable proposal, in one page.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23FFC531'/%3E%3Ccircle cx='32' cy='32' r='12' fill='%2307080E'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500..900&family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="solar.css?v=1">
+</head>
+<body>
+<header class="bar">
+  <a class="brand" href="./"><span class="brand__dot" aria-hidden="true"></span>SolarSpec<span class="brand__sub">PV design &amp; proposal studio</span></a>
+  <nav class="bar__actions" aria-label="Project">
+    <button type="button" class="btn btn--ghost" id="btnNew">New</button>
+    <label class="btn btn--ghost" for="fileOpen">Open</label>
+    <input type="file" id="fileOpen" accept="application/json,.json" hidden>
+    <button type="button" class="btn btn--ghost" id="btnSave">Save</button>
+    <button type="button" class="btn btn--ghost" id="btnShare">Copy link</button>
+    <button type="button" class="btn btn--ghost" id="btnCsv">CSV</button>
+    <button type="button" class="btn btn--sun" id="btnPrint">Print proposal</button>
+  </nav>
+</header>
+
+<main class="layout" id="main">
+  <form class="inputs" id="form" autocomplete="off" novalidate>
+    <!-- Filled by app.js -->
+  </form>
+
+  <section class="results" aria-live="polite">
+    <div class="tabs" role="tablist">
+      <button type="button" role="tab" class="tab is-on" data-tab="results" aria-selected="true">Results</button>
+      <button type="button" role="tab" class="tab" data-tab="proposal" aria-selected="false">Proposal preview</button>
+      <button type="button" role="tab" class="tab" data-tab="method" aria-selected="false">Method</button>
+    </div>
+    <div class="panel" id="panel-results"></div>
+    <div class="panel" id="panel-proposal" hidden></div>
+    <div class="panel" id="panel-method" hidden></div>
+  </section>
+</main>
+
+<div class="print-only" id="print"></div>
+<div class="toast" id="toast" role="status" hidden></div>
+
+<footer class="foot">
+  SolarSpec by <a href="../">Omer Yousif</a> · Climate data: NASA POWER · Results are estimates for early-stage design; confirm with a site survey and the equipment datasheets.
+</footer>
+
+<script src="climate.js?v=1"></script>
+<script src="engine.js?v=1"></script>
+<script src="app.js?v=1"></script>
+</body>
+</html>

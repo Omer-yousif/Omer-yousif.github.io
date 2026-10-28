@@ -13,6 +13,7 @@ A plain HTML, CSS and JavaScript site. No build tools, no frameworks, nothing to
 | One project | `project.html?id=robot` | The problem, what you did step by step (with photos), results, gallery, next and previous project |
 | Sustainability | `sustainability.html` | LEED, the Sunway figures and a timeline of activities with photo galleries |
 | Services | `services.html` | The services, how it works, and WhatsApp buttons |
+| SolarSpec tool | `solar/index.html` | Free solar PV design and proposal tool, linked from Services. See `solar/README.md` |
 
 Each page has its own colour: About violet, Experience orange, Projects cyan, Sustainability green, Services pink.
 
