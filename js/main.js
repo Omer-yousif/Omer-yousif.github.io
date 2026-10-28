@@ -505,7 +505,10 @@
         '<div style="position:relative;display:flex;flex-direction:column;align-items:flex-start;flex:1">' +
           '<h2 class="h3">' + t(it.title) + '</h2><p>' + t(it.text) + '</p>' +
           (price ? '<p class="price">' + esc(price) + '</p>' : '') +
-          '<a class="btn btn--wa btn--sm" href="' + esc(href) + '" target="_blank" rel="noopener">' + t(u.askQuote) + ICON.arrow + '</a>' +
+          '<div style="display:flex;gap:8px;flex-wrap:wrap">' +
+            '<a class="btn btn--wa btn--sm" href="' + esc(href) + '" target="_blank" rel="noopener">' + t(u.askQuote) + ICON.arrow + '</a>' +
+            (it.tool ? '<a class="btn btn--ghost btn--sm" href="' + esc(it.tool.href) + '">' + t(it.tool.label) + ICON.arrow + '</a>' : '') +
+          '</div>' +
         '</div></div>';
     }).join("");
     var steps = (s.steps || []).map(function (st, i) {
