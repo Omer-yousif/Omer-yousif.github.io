@@ -666,9 +666,9 @@ window.SITE = {
         tone: "yellow",
         featured: true,
         title: { en: "Solar PV sizing and bill check", ar: "تصميم الأنظمة الشمسية ومراجعة الفواتير" },
-        text: { en: "System sizing and payback estimate from your electricity bills, or a performance check of an existing system from its inverter data. Try my free SolarSpec tool for a first estimate under Solar ATAP.", ar: "تحديد حجم النظام وتقدير فترة استرداد التكلفة من فواتير الكهرباء، أو فحص أداء نظام قائم من بيانات العاكس. جرّب أداتي المجانية SolarSpec لتقدير أولي ضمن برنامج Solar ATAP." },
+        text: { en: "System sizing and payback estimate from your electricity bills, or a performance check of an existing system from its inverter data. Try my free Solar ATAP checker for a quick estimate first.", ar: "تحديد حجم النظام وتقدير فترة استرداد التكلفة من فواتير الكهرباء، أو فحص أداء نظام قائم من بيانات العاكس. جرّب أداة Solar ATAP المجانية للحصول على تقدير سريع أولًا." },
         price: { en: "", ar: "" },
-        tool: { href: "solar/", label: { en: "Open SolarSpec", ar: "افتح SolarSpec" } }
+        tool: { href: "solar/", label: { en: "Free Solar ATAP checker", ar: "أداة Solar ATAP المجانية" } }
       },
       {
         icon: "leaf",

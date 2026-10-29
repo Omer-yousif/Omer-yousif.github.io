@@ -3,58 +3,126 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>SolarSpec · PV design and proposal studio</title>
-<meta name="description" content="Size a rooftop solar PV system, check the string design, model bills under Malaysia's Solar ATAP or any tariff, and print a client-ready proposal. Free, runs in your browser.">
+<title>Solar ATAP checker · Omer Yousif</title>
+<meta name="description" content="Free, independent Solar ATAP estimate for Malaysian homes: enter your TNB bill and see a suggested system size, monthly saving and payback.">
 <meta name="theme-color" content="#07080E">
-<meta property="og:title" content="SolarSpec · PV design and proposal studio">
-<meta property="og:description" content="Solar sizing, string design, Solar ATAP savings, payback and a printable proposal, in one page.">
+<meta property="og:title" content="Free Solar ATAP checker">
+<meta property="og:description" content="Enter your TNB bill and see a suggested solar size, monthly saving and payback under Solar ATAP.">
 <meta property="og:type" content="website">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23FFC531'/%3E%3Ccircle cx='32' cy='32' r='12' fill='%2307080E'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500..900&family=Inter:wght@400;500;600;700&display=swap">
-<link rel="stylesheet" href="solar.css?v=1">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600..900&family=Inter:wght@400;500;600;700&display=swap">
+<style>
+  :root {
+    --bg: #07080E; --bg-2: #0C0E17; --card: #12141F; --card-2: #181B29; --line: #232738; --line-2: #33384F;
+    --ink: #F4F5FA; --ink-2: #A9AEC4; --ink-3: #727895; --sun: #FFC531; --sun-ink: #1A1300; --wa: #25D366;
+    color-scheme: dark;
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  html { background: var(--bg); -webkit-text-size-adjust: 100%; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.55 "Inter", "Segoe UI", system-ui, sans-serif; }
+  a { color: var(--sun); }
+  .wrap { max-width: 980px; margin: 0 auto; padding: 0 16px; }
+  .bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 0; border-bottom: 1px solid var(--line); }
+  .brand { display: flex; align-items: center; gap: 10px; color: var(--ink); text-decoration: none; font: 800 17px "Archivo", sans-serif; }
+  .brand i { width: 16px; height: 16px; border-radius: 50%; background: var(--sun); box-shadow: 0 0 16px rgba(255, 197, 49, .6); }
+  .bar a.back { color: var(--ink-2); font-size: 13px; text-decoration: none; }
+  h1 { font: 800 clamp(28px, 5vw, 44px)/1.1 "Archivo", sans-serif; letter-spacing: -.02em; margin: 36px 0 10px; }
+  h1 em { font-style: normal; color: var(--sun); }
+  .lead { color: var(--ink-2); max-width: 640px; margin: 0 0 28px; }
+  .grid { display: grid; grid-template-columns: minmax(0, 340px) minmax(0, 1fr); gap: 20px; align-items: start; }
+  @media (max-width: 820px) { .grid { grid-template-columns: 1fr; } }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 18px; }
+  .f { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+  .f > span { font-size: 13px; color: var(--ink-2); font-weight: 500; }
+  input[type="number"], select { width: 100%; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--line-2); background: var(--bg-2); color: var(--ink); font: inherit; }
+  input:focus-visible, select:focus-visible, a:focus-visible { outline: 2px solid var(--sun); outline-offset: 2px; }
+  .unit { position: relative; }
+  .unit input { padding-left: 44px; }
+  .unit em { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-style: normal; color: var(--ink-3); font-size: 13px; }
+  .seg { display: flex; gap: 8px; }
+  .seg label { flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px; padding: 9px; border-radius: 10px; border: 1px solid var(--line-2); background: var(--bg-2); cursor: pointer; font-size: 14px; }
+  .seg input { accent-color: var(--sun); }
+  .check { display: flex; gap: 8px; align-items: flex-start; font-size: 14px; color: var(--ink-2); }
+  .check input { margin-top: 4px; accent-color: var(--sun); }
+  .kpis { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; }
+  .kpi { background: var(--card-2); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; min-width: 0; }
+  .kpi span { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--ink-3); font-weight: 600; }
+  .kpi b { display: block; font: 800 21px/1.25 "Archivo", sans-serif; margin-top: 4px; overflow-wrap: anywhere; }
+  .kpi small { display: block; font-size: 12px; color: var(--ink-2); margin-top: 2px; }
+  .kpi--hero { border-color: rgba(255, 197, 49, .5); background: linear-gradient(160deg, rgba(255, 197, 49, .12), var(--card-2) 60%); }
+  .kpi--hero b { color: var(--sun); }
+  .hint { color: var(--ink-3); font-size: 13px; margin: 12px 0 0; }
+  .cta { margin-top: 20px; border-color: rgba(37, 211, 102, .45); background: linear-gradient(160deg, rgba(37, 211, 102, .08), var(--card) 55%); }
+  .cta h2 { font: 800 20px "Archivo", sans-serif; margin: 0 0 6px; }
+  .cta p { margin: 0 0 12px; color: var(--ink-2); }
+  .cta ul { margin: 0 0 16px; padding-left: 20px; color: var(--ink-2); columns: 2; column-gap: 28px; }
+  .cta li { margin: 3px 0; break-inside: avoid; }
+  @media (max-width: 560px) { .cta ul { columns: 1; } }
+  .btns { display: flex; gap: 10px; flex-wrap: wrap; }
+  .btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 18px; border-radius: 999px; font-weight: 700; font-size: 14px; text-decoration: none; }
+  .btn--wa { background: var(--wa); color: #062B14; }
+  .btn--ghost { border: 1.5px solid var(--line-2); color: var(--ink); }
+  .foot { margin: 40px 0 24px; padding-top: 16px; border-top: 1px solid var(--line); color: var(--ink-3); font-size: 12px; }
+</style>
 </head>
 <body>
-<header class="bar">
-  <a class="brand" href="./"><span class="brand__dot" aria-hidden="true"></span>SolarSpec<span class="brand__sub">PV design &amp; proposal studio</span></a>
-  <nav class="bar__actions" aria-label="Project">
-    <button type="button" class="btn btn--ghost" id="btnNew">New</button>
-    <label class="btn btn--ghost" for="fileOpen">Open</label>
-    <input type="file" id="fileOpen" accept="application/json,.json" hidden>
-    <button type="button" class="btn btn--ghost" id="btnSave">Save</button>
-    <button type="button" class="btn btn--ghost" id="btnShare">Copy link</button>
-    <button type="button" class="btn btn--ghost" id="btnCsv">CSV</button>
-    <button type="button" class="btn btn--sun" id="btnPrint">Print proposal</button>
-  </nav>
-</header>
+<div class="wrap">
+  <header class="bar">
+    <a class="brand" href="../"><i aria-hidden="true"></i>Solar ATAP checker</a>
+    <a class="back" href="../services.html">← Omer Yousif · Services</a>
+  </header>
 
-<main class="layout" id="main">
-  <form class="inputs" id="form" autocomplete="off" novalidate>
-    <!-- Filled by app.js -->
-  </form>
+  <main>
+    <h1>Is solar worth it for <em>your</em> home?</h1>
+    <p class="lead">Enter your TNB bill for a quick, independent estimate under Malaysia's Solar ATAP scheme. It takes 20 seconds and nothing you type leaves your browser.</p>
 
-  <section class="results" aria-live="polite">
-    <div class="tabs" role="tablist">
-      <button type="button" role="tab" class="tab is-on" data-tab="results" aria-selected="true">Results</button>
-      <button type="button" role="tab" class="tab" data-tab="proposal" aria-selected="false">Proposal preview</button>
-      <button type="button" role="tab" class="tab" data-tab="method" aria-selected="false">Method</button>
+    <div class="grid">
+      <form class="card" onsubmit="return false" autocomplete="off">
+        <label class="f"><span>Nearest city</span><select id="city"></select></label>
+        <label class="f"><span>Average monthly TNB bill</span><span class="unit"><em>RM</em><input id="bill" type="number" inputmode="decimal" min="0" step="10" value="350"></span></label>
+        <label class="f"><span>During the day, your home is…</span><select id="pattern"></select></label>
+        <div class="f"><span>Electricity supply</span>
+          <div class="seg">
+            <label><input type="radio" name="phase" value="1" checked>Single-phase</label>
+            <label><input type="radio" name="phase" value="3">Three-phase</label>
+          </div>
+        </div>
+        <label class="check"><input type="checkbox" id="hasQuote">I already have an installer's quote</label>
+        <p class="hint">For landed homes in Peninsular Malaysia. Condos and other stratified homes are not eligible for Solar ATAP.</p>
+      </form>
+
+      <section aria-live="polite">
+        <div class="card" id="out"></div>
+
+        <div class="card cta">
+          <h2>Get a full design report</h2>
+          <p>An installer quote is a sales document. My report is independent and checks the numbers properly:</p>
+          <ul>
+            <li>Hour-by-hour solar model for your roof</li>
+            <li>Exact panels, inverter and string design</li>
+            <li>Your bill month by month, before and after</li>
+            <li>Solar ATAP credit rules applied correctly</li>
+            <li>Battery or no battery, compared</li>
+            <li>25-year cash flow, payback and return</li>
+            <li>The best size for your home, not the biggest</li>
+            <li>A clear PDF you can show installers or your bank</li>
+          </ul>
+          <div class="btns">
+            <a class="btn btn--wa" id="wa" href="https://wa.me/60196885468" target="_blank" rel="noopener">Ask for a report on WhatsApp</a>
+            <a class="btn btn--ghost" href="samples/sample-proposal-kuala-lumpur.pdf" target="_blank" rel="noopener">See a sample report</a>
+          </div>
+        </div>
+      </section>
     </div>
-    <div class="panel" id="panel-results"></div>
-    <div class="panel" id="panel-proposal" hidden></div>
-    <div class="panel" id="panel-method" hidden></div>
-  </section>
-</main>
+  </main>
 
-<div class="print-only" id="print"></div>
-<div class="toast" id="toast" role="status" hidden></div>
-
-<footer class="foot">
-  SolarSpec by <a href="../">Omer Yousif</a> · Climate data: NASA POWER · Results are estimates for early-stage design; confirm with a site survey and the equipment datasheets.
-</footer>
-
-<script src="climate.js?v=1"></script>
-<script src="engine.js?v=1"></script>
-<script src="app.js?v=1"></script>
+  <footer class="foot">
+    Estimates use NASA POWER sunshine data, the TNB domestic tariff from 1 July 2025 and Solar ATAP's monthly credit rules. Tariffs and schemes change; this is not a quote.
+    Design and analysis only: installation is done by a registered contractor. · <a href="../">Omer Yousif</a>
+  </footer>
+</div>
+<script src="lite.js?v=1"></script>
 </body>
 </html>
